@@ -55,15 +55,15 @@ class MainWindow(QWidget):
             print("Dropped file: " + file_name)
 
     def execute(self):
-        if self.process is None:
-            self.process = QProcess()
-            self.process.readyReadStandardOutput.connect(self.handle_stdout)
-            self.process.readyReadStandardError.connect(self.handle_stderr)
-            self.process.stateChanged.connect(self.handle_state)
-            self.process.finished.connect(self.process_finished)
             wrk_file_path = self.label.text()
             if wrk_file_path.endswith('nk'):
-                self.process.start('"{}" -it {} {}'.format(nuke_path, python_file, wrk_file_path))
+                if self.process is None:
+                    self.process = QProcess()
+                    self.process.readyReadStandardOutput.connect(self.handle_stdout)
+                    self.process.readyReadStandardError.connect(self.handle_stderr)
+                    self.process.stateChanged.connect(self.handle_state)
+                    self.process.finished.connect(self.process_finished)
+                    self.process.start('"{}" -it {} {}'.format(nuke_path, python_file, wrk_file_path))
             else:
                 msgBox = QMessageBox()
                 msgBox.setText("Please Drag a nuke file")
@@ -71,7 +71,7 @@ class MainWindow(QWidget):
 
     def handle_stderr(self):
         data = self.process.readAllStandardError()
-        stderr = bytes(data).decode("utf8")
+        stderr = bytes(data).decode()
         # Extract progress if it is in the data.
         progress = simple_percent_parser(stderr)
         if progress:

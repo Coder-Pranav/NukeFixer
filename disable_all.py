@@ -23,7 +23,7 @@ for index, item in enumerate(node):
     try:
         progress = int(((index + 1) / total_nodes) * 100)
         item['disable'].setValue(True)
-        sys.stdout.write('Disabled: ' + (item['name'].value() + '\n'))
+        sys.stdout.write('Disabled: ' + (item['name'].value()))
         sys.stderr.write("Total complete: {}%\n".format(progress))
         flush_then_wait()
     except:
