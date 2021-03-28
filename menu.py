@@ -1,6 +1,13 @@
-import fixer
 import nuke
+import sys
+menu = nuke.menu('Nuke')
+menu.addCommand('Tools/Fixer', lambda: fixer_run())
 
-toolbar = nuke.menu('Nodes')
-c = toolbar.addMenu('PP Tools', 'pptool.png')
-c.addCommand('Fixer', lambda: fixer.run(),icon='pptool.png')
+
+def fixer_run():
+    try:
+        del sys.modules['fixer']
+    except:
+        pass
+    import fixer
+    fixer.run()
